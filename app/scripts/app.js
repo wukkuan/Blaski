@@ -1,10 +1,11 @@
 define([
 		'blaski-app',
-		'dropbox',
-		'route/router'
+		'route/router',
+		'model/dropbox-account'
 	], function() {
 	'use strict';
 
 	Blaski.initialize();
+	Blaski.dropboxAccount.link();
 
 });
