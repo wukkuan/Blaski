@@ -15,8 +15,16 @@
     "quotmark": "single",
     "regexp": true,
     "undef": true,
-    "unused": true,
+    "unused": false,
     "strict": true,
     "trailing": true,
-    "smarttabs": true
+    "smarttabs": true,
+    "predef": {
+        "define": false,
+        "require": false,
+        "Ember": false,
+        "DS": false,
+        "Dropbox": false,
+        "Blaski": false
+    }
 }
