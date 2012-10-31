@@ -1,1 +1,8 @@
 <h1>Inside page.hbs</h1>
+{{#if isEditing}}
+
+{{else}}
+	<div class="blaski-page">
+		{{text}}
+	</div>
+{{/if}}
