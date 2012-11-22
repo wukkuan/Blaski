@@ -91,7 +91,6 @@ define([
 					context.set('_meta.dropbox.data', data);
 					context.set('isLoading', false);
 					context.set('isLoaded', true);
-					console.log('loadFile resolve');
 					deferred.resolve(self);
 				});
 
