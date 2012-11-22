@@ -2,7 +2,14 @@
 	"folders":
 	[
 		{
-			"path": "/Users/williamblasko/Sites/blaski"
+			"path": "./",
+			"folder_exclude_patterns": [
+				"app/scripts",
+				"test/lib"
+			]
+		}, {
+			"path": "app/scripts",
+			"folder_exclude_patterns": ["vendor"]
 		}
 	],
     "settings": {
