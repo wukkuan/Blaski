@@ -37,10 +37,14 @@ define([
 				var deferred = Ember.Object.create(Ember.Deferred);
 
 				var self = this;
+				context.setProperties({
+					isSaving: true
+				});
 				dropboxAccount.get('client').writeFile(path, data, {}, function(error, stat) {
 					if (error) {
 						context.setProperties({
 							isError: true,
+							isSaving: false,
 							lastError: new Error()
 						});
 						deferred.reject(self);
@@ -48,9 +52,12 @@ define([
 						return;
 					}
 					self.applyStat(context, stat);
-					context.set('persistedState.data', data);
-					context.set('isError', false);
-					context.set('lastError', null);
+					context.setProperties({
+						'persistedState.data': data,
+						isError: false,
+						isSaving: false,
+						lastError: null
+					});
 					deferred.resolve(self);
 				});
 

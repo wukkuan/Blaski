@@ -18,6 +18,7 @@ define([
 			}),
 			isLoaded: false,
 			isLoading: false,
+			isSaving: false,
 			isError: false,
 			lastError: null,
 

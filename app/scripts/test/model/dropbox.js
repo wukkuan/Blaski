@@ -114,10 +114,12 @@ define([
 						file.set('data', "this is test data");
 
 						expect(file.get('isDirty')).to.be.true;
+						expect(file.get('isSaving')).to.be.false;
 						var deferred = file.save();
 						expect(file.get('isDirty')).to.be.true;
-						console.log('save began', deferred.toString());
+						expect(file.get('isSaving')).to.be.true;
 						deferred.then(function() {
+							expect(file.get('isSaving')).to.be.false;
 							expect(file.get('isDirty')).to.be.false;
 							expect(file.get('isError')).to.be.false;
 							expect(file.get('lastError')).to.not.exist;
@@ -127,7 +129,7 @@ define([
 							done();
 						});
 						expect(file.get('isDirty')).to.be.true;
-						console.log('save finished asynchronously');
+						expect(file.get('isSaving')).to.be.true;
 					});
 
 					it("should be dirty after failure to write file", function(done) {
@@ -137,9 +139,12 @@ define([
 						file.set('data', "this is test data");
 
 						expect(file.get('isDirty')).to.be.true;
+						expect(file.get('isSaving')).to.be.false;
 						var deferred = file.save();
 						expect(file.get('isDirty')).to.be.true;
+						expect(file.get('isSaving')).to.be.true;
 						deferred.then(function() {}, function() {
+							expect(file.get('isSaving')).to.be.false;
 							expect(file.get('isDirty')).to.be.true;
 							expect(file.get('isError')).to.be.true;
 							expect(file.get('lastError')).to.exist;
@@ -149,6 +154,7 @@ define([
 							done();
 						});
 						expect(file.get('isDirty')).to.be.true;
+						expect(file.get('isSaving')).to.be.true;
 					});
 
 					it("should read a file", function(done) {
@@ -157,6 +163,7 @@ define([
 						var file = repo.getFile("/hello_world.txt");
 
 						expect(file.get('isLoading')).to.be.false;
+						expect(file.get('isSaving')).to.be.false;
 						expect(file.get('isLoaded')).to.be.false;
 						expect(file.get('isDirty')).to.be.true;
 						var deferred = file.load();
@@ -166,6 +173,7 @@ define([
 						console.log(deferred);
 						deferred.then(function() {
 							expect(file.get('isLoading')).to.be.false;
+							expect(file.get('isSaving')).to.be.false;
 							expect(file.get('isLoaded')).to.be.true;
 							expect(file.get('isDirty')).to.be.false;
 							expect(file.get('isError')).to.be.false;
