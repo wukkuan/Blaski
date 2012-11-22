@@ -1,7 +1,7 @@
 define([
 		'blaski-app',
 		'route/router',
-		'model/dropbox-account'
+		'model/dropbox/dropbox-account'
 	], function() {
 	'use strict';
 

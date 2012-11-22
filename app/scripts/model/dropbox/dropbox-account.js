@@ -7,10 +7,12 @@ define([
 
 		Blaski.dropboxAccount = Ember.Object.create({
 			isLinked: false,
+
 			client: new Dropbox.Client({
 				key: 'R5mlbFNuqWA=|vm7yKHR7EVB3yowiVvlx8WX3uwz5jqQaqnEqkNAUdA==',
 				sandbox: true
 			}),
+
 			link: function() {
 				var client = this.get('client');
 				var self = this;

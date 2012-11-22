@@ -1,4 +1,7 @@
-define([], function() {
+require([
+		'test/model/dropbox'
+	],
+	function() {
   var runner = mocha.run();
 
   if(!window.PHANTOMJS) return;
@@ -38,4 +41,6 @@ define([], function() {
     var args = [].slice.call(arguments);
     alert(JSON.stringify(args));
   }
-});
+
+	}
+);

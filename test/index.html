@@ -23,25 +23,61 @@
 	<!-- -->
 
 	<!-- include source files here... -->
+	<script type="text/javascript" src="../app/scripts/vendor/require.js"></script>
 
 	<!-- include spec files here... -->
 	<script>
 	// replace this by your own specs
 	(function() {
-		describe('Give it some context', function() {
-			describe('maybe a bit more context here', function() {
+		//TODO: Factor this out into a file that is shared between the app
+		//index.html and the tests here (and an r.js build).
+		require.config({
+			baseUrl: '../app/scripts',
 
-				it('should run here few assertions', function() {
+			shim: {
+				'handlebars': {
+					exports: 'Handlebars'
+				},
+				'ember': {
+					deps: [ 'jquery', 'handlebars' ],
+					exports: 'Ember'
+				},
+				'ember-data': {
+					deps: [ 'ember' ],
+					exports: 'DS'
+				},
+				'dropbox': {
+					exports: 'Dropbox'
+				}
+			},
 
-				});
-
-			});
+			paths: {
+				'jquery': 'vendor/jquery.min',
+				'ember': 'vendor/ember-1.0.0-pre.2',
+				'ember-data': 'vendor/ember-data-latest',
+				'handlebars': 'vendor/handlebars-latest',
+				'dropbox': 'vendor/dropbox-latest'
+			}
 		});
+
+		require(['test/spec-runner'], function() {
+		});
+
+		// describe('Give it some context', function() {
+		// 	describe('maybe a bit more context here', function() {
+		// 		it('should run here few assertions', function(done) {
+		// 			expect(true).to.equal(true);
+		// 			setTimeout(function() {
+		// 				console.log('test');
+		// 				done();
+		// 			}, 500);
+		// 		});
+		// 	});
+		// });
 	})();
 	</script>
 
 	<!-- trigger the mocha runner -->
-	<script src="runner/mocha.js"></script>
 
 </body>
 </html>

@@ -26,6 +26,13 @@
         "Ember": false,
         "DS": false,
         "Dropbox": false,
-        "Blaski": false
+        "Blaski": false,
+
+        // Unit Testing
+        "describe": false,
+        "it": false,
+        "expect": false,
+        "beforeEach": false,
+        "afterEach": false
     }
 }
