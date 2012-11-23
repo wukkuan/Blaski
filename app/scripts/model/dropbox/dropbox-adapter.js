@@ -9,6 +9,7 @@ define([
 
 		Blaski.DropboxAdapter = Ember.Object.extend({
 			dropboxAccount: Blaski.dropboxAccount,
+			deferred: null,
 
 			applyStat: function(context, stat) {
 				if (!context.get('_meta.dropbox')) {
@@ -35,6 +36,7 @@ define([
 				var path = context.get('path');
 				var data = context.get('data');
 				var deferred = Ember.Object.create(Ember.Deferred);
+				this.set('deferred', deferred);
 
 				var self = this;
 				context.setProperties({
@@ -69,9 +71,13 @@ define([
 			},
 
 			loadFile: function(context) {
+				if (context.get('isLoading') || context.get('isSaving')) {
+					return this.get('deferred');
+				}
 				var dropboxAccount = this.get('dropboxAccount');
 				var path = context.get('path');
 				var deferred = Ember.Object.create(Ember.Deferred);
+				this.set('deferred', deferred);
 
 				var self = this;
 				context.set('isLoading', true);
