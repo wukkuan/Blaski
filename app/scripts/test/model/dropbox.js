@@ -224,6 +224,35 @@ define([
 						var deferred2 = file.load();
 						expect(deferred1).to.equals(deferred2);
 					});
+
+					it("should fail the deferred on the next runloop when saving while already loading or saving", function(done) {
+						prepare_readFile_success();
+						prepare_writeFile_success();
+						var repo = Blaski.repository;
+						var file = repo.getFile('/hello_world.txt');
+						repo.set('data', "Hello world!");
+						var deferredLoading = file.load();
+						var deferredSaving = file.save();
+						var loadingDone = false;
+						// Note that technically the saving is supposed to fail, but that's
+						// what we're considering done.
+						var savingDone = false;
+						deferredLoading.then(function() {
+							if (savingDone) {
+								done();
+							} else {
+								loadingDone = true;
+							}
+						});
+						deferredSaving.then(function() {},
+															  function() {
+							if (loadingDone) {
+								done();
+							} else {
+								savingDone = true;
+							}
+						});
+					});
 				});
 			});
 		});

@@ -32,6 +32,13 @@ define([
 			},
 
 			saveFile: function(context) {
+				if (context.get('isSaving') || context.get('isLoading')) {
+					var failedDeferred = Ember.Object.create(Ember.Deferred);
+					Ember.run.next(this, function() {
+						failedDeferred.reject(this);
+					});
+					return failedDeferred;
+				}
 				var dropboxAccount = this.get('dropboxAccount');
 				var path = context.get('path');
 				var data = context.get('data');
