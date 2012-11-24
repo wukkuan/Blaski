@@ -91,6 +91,44 @@ define([
 				};
 			}
 
+			function prepare_move_success() {
+				client.move = function(fromPath, toPath, callback) {
+					var error = null;
+					var stat = JSON.parse('{"path":"/hello_world_2.txt","name":"hello_world_2.txt","isFolder":false,"isFile":true,"isRemoved":false,"typeIcon":"page_white_text","modifiedAt":"2012-10-24T20:34:53.000Z","clientModifiedAt":"2012-10-24T20:34:53.000Z","inAppFolder":true,"size":14,"humanSize":"14 bytes","hasThumbnail":false,"versionTag":"10b31176a","mimeType":"text/plain"}');
+					callback(error, stat);
+				};
+			}
+
+			function prepare_move_invalid() {
+				client.move = function(fromPath, toPath, callback) {
+					var error = new Dropbox.ApiError({
+						status: 404,
+						responseText: "File not found."
+					}, 'GET', 'http://unittest.example.com');
+					var stat = null;
+					callback(error, stat);
+				};
+			}
+
+			function prepare_mkdir_success() {
+				client.mkdir = function(fromPath, toPath, callback) {
+					var error = null;
+					var stat = JSON.parse('{"path":"/hello_world_folder","name":"hello_world_folder","isFolder":true,"isFile":false,"isRemoved":false,"typeIcon":"page_white_text","modifiedAt":"2012-10-24T20:34:53.000Z","clientModifiedAt":"2012-10-24T20:34:53.000Z","inAppFolder":true,"size":14,"humanSize":"14 bytes","hasThumbnail":false,"versionTag":"10b31176a","mimeType":"text/plain"}');
+					callback(error, stat);
+				};
+			}
+
+			function prepare_mkdir_invalid() {
+				client.mkdir = function(fromPath, toPath, callback) {
+					var error = new Dropbox.ApiError({
+						status: 404,
+						responseText: "File not found."
+					}, 'GET', 'http://unittest.example.com');
+					var stat = null;
+					callback(error, stat);
+				};
+			}
+
 			describe("Test the Dropbox.js custom testing functionality", function() {
 				it("should handle errors", function(done) {
 					prepare_writeFile_invalid();
