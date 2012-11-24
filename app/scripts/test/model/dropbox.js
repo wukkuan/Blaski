@@ -238,18 +238,16 @@ define([
 						// what we're considering done.
 						var savingDone = false;
 						deferredLoading.then(function() {
+							loadingDone = true;
 							if (savingDone) {
 								done();
-							} else {
-								loadingDone = true;
 							}
 						});
 						deferredSaving.then(function() {},
 															  function() {
+							savingDone = true;
 							if (loadingDone) {
 								done();
-							} else {
-								savingDone = true;
 							}
 						});
 					});
