@@ -170,7 +170,6 @@ define([
 						expect(file.get('isLoading')).to.be.true;
 						expect(file.get('isLoaded')).to.be.false;
 						expect(file.get('isDirty')).to.be.true;
-						console.log(deferred);
 						deferred.then(function() {
 							expect(file.get('isLoading')).to.be.false;
 							expect(file.get('isSaving')).to.be.false;
@@ -200,7 +199,6 @@ define([
 						expect(file.get('isLoading')).to.be.true;
 						expect(file.get('isLoaded')).to.be.false;
 						expect(file.get('isDirty')).to.be.true;
-						console.log(deferred);
 						deferred.then(function() {}, function() {
 							expect(file.get('isLoading')).to.be.false;
 							expect(file.get('isLoaded')).to.be.false;
