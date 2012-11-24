@@ -12,13 +12,15 @@ define([
 			  expr: true */
 			var dropboxAccount = Blaski.dropboxAccount;
 			var client = dropboxAccount.get('client');
-			var _writeFile, _readFile, _readdir;
+			var _writeFile, _readFile, _readdir, _move, _mkdir;
 			var _repositoryAdapterClass;
 
 			beforeEach(function() {
 				_writeFile = client.writeFile;
 				_readFile = client.readFile;
 				_readdir = client.readdir;
+				_move = client.move;
+				_mkdir = client.mkdir;
 				_repositoryAdapterClass = Blaski.repository.get('adapterClass');
 				Blaski.repository.set('adapterClass', Blaski.DropboxAdapter);
 			});
@@ -27,6 +29,8 @@ define([
 				client.writeFile = _writeFile;
 				client.readFile = _readFile;
 				client.readdir = _readdir;
+				client.move = _move;
+				client.mkdir = _mkdir;
 				Blaski.repository.set('adapterClass', _repositoryAdapterClass);
 			});
 
