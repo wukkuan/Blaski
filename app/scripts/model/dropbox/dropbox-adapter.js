@@ -18,8 +18,7 @@ define([
 				context.set('_meta.dropbox.stat', stat);
 
 				context.setProperties({
-					path: stat.path,
-					name: stat.name
+					_path: stat.path
 				});
 
 				if (stat.isFile) {

@@ -9,6 +9,7 @@ define([
 			//TODO: Instead of using _meta, just use _adapter instances
 			_meta: Ember.Object.create(),
 			_adapter: null,
+			_path: null,
 
 			persistedState: Ember.Object.create({
 				data: undefined,
@@ -25,8 +26,20 @@ define([
 				return this.get('persistedState.data') !== this.get('data');
 			}.property('persistedState.data', 'data'),
 
-			path: null,
-			name: null,
+			path: function() {
+				return this.get('_path');
+			}.property('_path'),
+
+			name: function() {
+				var path = this.get('path');
+				var lastSlash = path.lastIndexOf('/');
+				if (lastSlash === -1) {
+					throw new Error('Path must include a slash.');
+				}
+				var name = path.substr(lastSlash + 1);
+				return name;
+			}.property('path'),
+
 			data: null,
 
 			// Size in bytes
