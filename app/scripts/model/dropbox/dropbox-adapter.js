@@ -72,6 +72,47 @@ define([
 				return deferred;
 			},
 
+			moveFile: function(context, newPath) {
+				if (context.get('isSaving') || context.get('isLoading')) {
+					var failedDeferred = Ember.Object.create(Ember.Deferred);
+					Ember.run.next(this, function() {
+						failedDeferred.reject(this);
+					});
+					return failedDeferred;
+				}
+
+				var dropboxAccount = this.get('dropboxAccount');
+				var path = context.get('path');
+				var deferred = Ember.Object.create(Ember.Deferred);
+				this.set('deferred', deferred);
+
+				var self = this;
+				context.setProperties({
+					isSaving: true
+				});
+				dropboxAccount.get('client').move(path, newPath, function(error, stat) {
+					if (error) {
+						context.setProperties({
+							isError: true,
+							isSaving: false,
+							lastError: new Error()
+						});
+						deferred.reject(self);
+						console.warn('error while moving file');
+						return;
+					}
+					self.applyStat(context, stat);
+					context.setProperties({
+						isError: false,
+						isSaving: false,
+						lastError: null
+					});
+					deferred.resolve(self);
+				});
+
+				return deferred;
+			},
+
 			saveFolder: function(context) {
 				throw new Error("saveFolder not yet implemented.");
 			},

@@ -65,6 +65,10 @@ define([
 
 			load: function() {
 				return this.get('_adapter').loadFile(this);
+			},
+
+			move: function(path) {
+				return this.get('_adapter').moveFile(this, path);
 			}
 
 		});

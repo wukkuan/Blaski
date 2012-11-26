@@ -95,7 +95,7 @@ define([
 				client.move = function(fromPath, toPath, callback) {
 					var error = null;
 					var stat = JSON.parse('{"path":"/hello_world_2.txt","name":"hello_world_2.txt","isFolder":false,"isFile":true,"isRemoved":false,"typeIcon":"page_white_text","modifiedAt":"2012-10-24T20:34:53.000Z","clientModifiedAt":"2012-10-24T20:34:53.000Z","inAppFolder":true,"size":14,"humanSize":"14 bytes","hasThumbnail":false,"versionTag":"10b31176a","mimeType":"text/plain"}');
-					callback(error, stat);
+					Ember.run.next(function() { callback(error, stat); });
 				};
 			}
 
@@ -106,7 +106,7 @@ define([
 						responseText: "File not found."
 					}, 'GET', 'http://unittest.example.com');
 					var stat = null;
-					callback(error, stat);
+					Ember.run.next(function() { callback(error, stat); });
 				};
 			}
 
@@ -114,7 +114,7 @@ define([
 				client.mkdir = function(fromPath, toPath, callback) {
 					var error = null;
 					var stat = JSON.parse('{"path":"/hello_world_folder","name":"hello_world_folder","isFolder":true,"isFile":false,"isRemoved":false,"typeIcon":"page_white_text","modifiedAt":"2012-10-24T20:34:53.000Z","clientModifiedAt":"2012-10-24T20:34:53.000Z","inAppFolder":true,"size":14,"humanSize":"14 bytes","hasThumbnail":false,"versionTag":"10b31176a","mimeType":"text/plain"}');
-					callback(error, stat);
+					Ember.run.next(function() { callback(error, stat); });
 				};
 			}
 
@@ -125,7 +125,7 @@ define([
 						responseText: "File not found."
 					}, 'GET', 'http://unittest.example.com');
 					var stat = null;
-					callback(error, stat);
+					Ember.run.next(function() { callback(error, stat); });
 				};
 			}
 
@@ -292,6 +292,32 @@ define([
 								done();
 							}
 						});
+					});
+
+					it('should successfully move a file when calling move.', function(done) {
+						prepare_move_success();
+						var repo = Blaski.repository;
+						var file = repo.getFile("/hello_world.txt");
+						file.set('data', "this is test data");
+
+						expect(file.get('isDirty')).to.be.true;
+						expect(file.get('isSaving')).to.be.false;
+						var deferred = file.move('/hello_world_2.txt');
+						expect(file.get('isDirty')).to.be.true;
+						expect(file.get('isSaving')).to.be.true;
+						deferred.then(function() {
+							expect(file.get('isSaving')).to.be.false;
+							expect(file.get('isDirty')).to.be.false;
+							expect(file.get('isError')).to.be.false;
+							expect(file.get('lastError')).to.not.exist;
+							expect(file.get('path')).to.exist;
+							expect(file.get('name')).to.exist;
+							expect(file.get('data')).to.exist;
+							done();
+						});
+						expect(file.get('isDirty')).to.be.true;
+						expect(file.get('isSaving')).to.be.true;
+					  done();
 					});
 				});
 			});
