@@ -8,7 +8,6 @@ define([
 		Blaski.File = Ember.Object.extend({
 			//TODO: Instead of using _meta, just use _adapter instances
 			_meta: Ember.Object.create(),
-			// First adapter is used for loading. All adapters used for saving.
 			_adapter: null,
 
 			persistedState: Ember.Object.create({
