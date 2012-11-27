@@ -14,6 +14,7 @@ define([
 			persistedState: Ember.Object.create({
 				data: undefined
 			}),
+			//TODO: Use private properties and make most of these read only.
 			isLoaded: false,
 			isLoading: false,
 			isSaving: false,
@@ -39,6 +40,8 @@ define([
 			}.property('path'),
 
 			data: null,
+
+			//TODO: Data here that comes from stats should be read only.
 
 			// Size in bytes
 			size: null,
