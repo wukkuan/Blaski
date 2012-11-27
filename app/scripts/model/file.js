@@ -12,9 +12,7 @@ define([
 			_path: null,
 
 			persistedState: Ember.Object.create({
-				data: undefined,
-				name: undefined,
-				path: undefined
+				data: undefined
 			}),
 			isLoaded: false,
 			isLoading: false,
