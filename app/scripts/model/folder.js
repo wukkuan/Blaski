@@ -7,25 +7,46 @@ define([
 
 		Blaski.Folder = Ember.Object.extend({
 			_meta: Ember.Object.create(),
-			// First adapter is used for loading. All adapters used for saving.
 			_adapter: null,
+			_path: null,
 
+			//TODO: isLoading and isLoaded should be changed to read only properties
+			//and use "private" properties.
 			isLoaded: false,
 			isLoading: false,
+			isSaving: false,
+			isError: false,
+			lastError: null,
+			isDirty: true,
 
-			path: null,
-			name: null,
+			path: function() {
+				return this.get('path');
+			}.property('_path'),
+
+			name: function() {
+				var path = this.get('path');
+				if (!path) {
+					return path;
+				} else if (path === '/') {
+					return '';
+				}
+				var lastSlash = path.lastIndexOf('/');
+				if (lastSlash === -1) {
+					throw new Error('Path must include a slash.');
+				}
+				var name = path.substr(lastSlash + 1);
+				return name;
+			}.property('path'),
+
 			files: [],
 			folders: [],
 
-			//TODO: Use deferreds.
-			save: function() {
-				this.get('_adapter').saveFolder(this);
+			create: function() {
+				return this.get('_adapter').createFolder(this);
 			},
 
-			//TODO: Use deferreds.
 			load: function() {
-				this.get('_adapter').loadFolder(this);
+				return this.get('_adapter').loadFolder(this);
 			}
 		});
 	}
