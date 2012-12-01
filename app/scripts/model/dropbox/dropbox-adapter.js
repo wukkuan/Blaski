@@ -158,8 +158,14 @@ define([
 			},
 
 			loadFolder: function(context) {
+				if (context.get('isLoading') || context.get('isSaving')) {
+					return this.get('deferred');
+				}
 				var dropboxAccount = this.get('dropboxAccount');
 				var path = context.get('path');
+				var deferred = Ember.Object.create(Ember.Deferred);
+				this.set('deferred', deferred);
+				context.set('isLoading', true);
 
 				var self = this;
 				dropboxAccount.get('client').readdir(path,
@@ -167,7 +173,16 @@ define([
 					                     function(error, contents, stat, contentStats)
 				{
 					if (error) {
-						return alert("error loading folder");
+						context.setProperties({
+							isError: true,
+							lastError: new Error(),
+							isDirty: true,
+							isLoading: false,
+							isLoaded: false
+						});
+						deferred.reject(self);
+						console.warn("error loading folder");
+						return;
 					}
 
 					self.applyStat(context, stat);
@@ -188,8 +203,16 @@ define([
 							throw new Error("Folder has non-file/folder content.");
 						}
 						self.applyStat(item, contentStat);
+						context.set('isLoading', false);
+						context.set('isLoaded', true);
+						context.set('isDirty', false);
+						context.set('isError', false);
+						context.set('lastError', null);
+						deferred.resolve(self);
 					});
 				});
+
+				return deferred;
 			}
 		});
 	}

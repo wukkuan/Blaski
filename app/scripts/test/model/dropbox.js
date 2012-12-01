@@ -91,6 +91,25 @@ define([
 				};
 			}
 
+			function prepare_readdir_success() {
+				client.readdir = function(path, options, callback) {
+					if (callback === undefined) {
+						callback = options;
+						options = {};
+					}
+					var error = null;
+					var filesAndFolderNames = ['dog', 'hello_world.txt', 'repository'];
+					var statsJson = JSON.parse('[{"revision": 4, "rev": "40b31176a", "thumb_exists": false, "bytes": 0, "modified": "Wed, 24 Oct 2012 20:39:32 +0000", "path": "/dog", "is_dir": true, "icon": "folder", "root": "dropbox", "size": "0 bytes"}, {"revision": 1, "rev": "10b31176a", "thumb_exists": false, "bytes": 14, "modified": "Wed, 24 Oct 2012 20:34:53 +0000", "client_mtime": "Wed, 24 Oct 2012 20:34:53 +0000", "path": "/hello_world.txt", "is_dir": false, "icon": "page_white_text", "root": "dropbox", "mime_type": "text/plain", "size": "14 bytes"}, {"revision": 9, "rev": "90b31176a", "thumb_exists": false, "bytes": 0, "modified": "Sun, 04 Nov 2012 21:37:20 +0000", "path": "/repository", "is_dir": true, "icon": "folder", "root": "dropbox", "size": "0 bytes"}]');
+					var stats = statsJson.map(function(stat) {
+						return new Dropbox.Stat(stat);
+					});
+					var stat = new Dropbox.Stat(JSON.parse('{"hash": "46fa3a06254b5d74b7e7307a1a6c4a9b", "thumb_exists": false, "bytes": 0, "path": "/", "is_dir": true, "size": "0 bytes", "root": "app_folder", "contents": [{"revision": 4, "rev": "40b31176a", "thumb_exists": false, "bytes": 0, "modified": "Wed, 24 Oct 2012 20:39:32 +0000", "path": "/dog", "is_dir": true, "icon": "folder", "root": "dropbox", "size": "0 bytes"}, {"revision": 1, "rev": "10b31176a", "thumb_exists": false, "bytes": 14, "modified": "Wed, 24 Oct 2012 20:34:53 +0000", "client_mtime": "Wed, 24 Oct 2012 20:34:53 +0000", "path": "/hello_world.txt", "is_dir": false, "icon": "page_white_text", "root": "dropbox", "mime_type": "text/plain", "size": "14 bytes"}, {"revision": 9, "rev": "90b31176a", "thumb_exists": false, "bytes": 0, "modified": "Sun, 04 Nov 2012 21:37:20 +0000", "path": "/repository", "is_dir": true, "icon": "folder", "root": "dropbox", "size": "0 bytes"}], "icon": "folder"}') );
+					Ember.run.next(this, function() {
+						callback(error, filesAndFolderNames, stat, stats);
+					});
+				};
+			}
+
 			function prepare_move_success() {
 				client.move = function(fromPath, toPath, callback) {
 					var error = null;
@@ -285,11 +304,14 @@ define([
 								done();
 							}
 						});
-						deferredSaving.then(function() {},
-															  function() {
-							savingDone = true;
-							if (loadingDone) {
-								done();
+						deferredSaving.then(
+							function() {
+								// Do nothing.
+							},
+						  function() {
+								savingDone = true;
+								if (loadingDone) {
+									done();
 							}
 						});
 					});
@@ -317,7 +339,32 @@ define([
 						});
 						expect(file.get('isDirty')).to.be.true;
 						expect(file.get('isSaving')).to.be.true;
-					  done();
+						done();
+					});
+				});
+
+				describe('Test Folder', function() {
+					it('should load a folder', function(done) {
+						prepare_readdir_success();
+						var repo = Blaski.repository;
+						var folder = repo.getFolder('/');
+
+						expect(folder.get('isDirty')).to.be.true;
+						expect(folder.get('isLoading')).to.be.false;
+						expect(folder.get('isLoaded')).to.be.false;
+						var deferred = folder.load();
+						expect(folder.get('isDirty')).to.be.true;
+						expect(folder.get('isLoading')).to.be.true;
+						expect(folder.get('isLoaded')).to.be.false;
+						deferred.then(function() {
+							expect(folder.get('isDirty')).to.be.false;
+							expect(folder.get('isLoading')).to.be.false;
+							expect(folder.get('isLoaded')).to.be.true;
+							done();
+						});
+						expect(folder.get('isDirty')).to.be.true;
+						expect(folder.get('isLoading')).to.be.true;
+						expect(folder.get('isLoaded')).to.be.false;
 					});
 				});
 			});
