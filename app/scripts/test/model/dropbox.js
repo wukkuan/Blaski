@@ -149,7 +149,7 @@ define([
 			}
 
 			function prepare_mkdir_success() {
-				client.mkdir = function(fromPath, toPath, callback) {
+				client.mkdir = function(path, callback) {
 					var error = null;
 					var stat = JSON.parse('{"path":"/hello_world_folder","name":"hello_world_folder","isFolder":true,"isFile":false,"isRemoved":false,"typeIcon":"page_white_text","modifiedAt":"2012-10-24T20:34:53.000Z","clientModifiedAt":"2012-10-24T20:34:53.000Z","inAppFolder":true,"size":14,"humanSize":"14 bytes","hasThumbnail":false,"versionTag":"10b31176a","mimeType":"text/plain"}');
 					Ember.run.next(function() { callback(error, stat); });
@@ -157,7 +157,7 @@ define([
 			}
 
 			function prepare_mkdir_invalid() {
-				client.mkdir = function(fromPath, toPath, callback) {
+				client.mkdir = function(path, callback) {
 					var error = new Dropbox.ApiError({
 						status: 404,
 						responseText: "File not found."
@@ -411,6 +411,64 @@ define([
 						);
 						expect(folder.get('isDirty')).to.be.true;
 						expect(folder.get('isLoading')).to.be.true;
+						expect(folder.get('isLoaded')).to.be.false;
+					});
+
+					it("should create folders as expected.", function(done) {
+						prepare_mkdir_success();
+						var repo = Blaski.repository;
+						var folder = repo.getFolder('/');
+
+						expect(folder.get('isDirty')).to.be.true;
+						expect(folder.get('isLoading')).to.be.false;
+						expect(folder.get('isLoaded')).to.be.false;
+						var deferred = folder.create();
+						expect(folder.get('isDirty')).to.be.true;
+						expect(folder.get('isLoading')).to.be.false;
+						expect(folder.get('isLoaded')).to.be.false;
+						expect(folder.get('isSaving')).to.be.true;
+						deferred.then(function() {
+							expect(folder.get('isSaving')).to.be.false;
+							expect(folder.get('isDirty')).to.be.false;
+							expect(folder.get('isLoading')).to.be.false;
+							expect(folder.get('isLoaded')).to.be.true;
+							done();
+						});
+						expect(folder.get('isSaving')).to.be.true;
+						expect(folder.get('isDirty')).to.be.true;
+						expect(folder.get('isLoading')).to.be.false;
+						expect(folder.get('isLoaded')).to.be.false;
+					});
+
+					it('should fail to create a folder and handle the error gracefully', function(done) {
+						prepare_mkdir_invalid();
+						var repo = Blaski.repository;
+						var folder = repo.getFolder('/');
+
+						expect(folder.get('isDirty')).to.be.true;
+						expect(folder.get('isLoading')).to.be.false;
+						expect(folder.get('isLoaded')).to.be.false;
+						expect(folder.get('isSaving')).to.be.false;
+						var deferred = folder.create();
+						expect(folder.get('isDirty')).to.be.true;
+						expect(folder.get('isLoading')).to.be.false;
+						expect(folder.get('isLoaded')).to.be.false;
+						expect(folder.get('isSaving')).to.be.true;
+						deferred.then(
+							function() {
+								// Do nothing.
+							},
+							function() {
+								expect(folder.get('isSaving')).to.be.false;
+								expect(folder.get('isDirty')).to.be.true;
+								expect(folder.get('isLoading')).to.be.false;
+								expect(folder.get('isLoaded')).to.be.false;
+								done();
+							}
+						);
+						expect(folder.get('isSaving')).to.be.true;
+						expect(folder.get('isDirty')).to.be.true;
+						expect(folder.get('isLoading')).to.be.false;
 						expect(folder.get('isLoaded')).to.be.false;
 					});
 
