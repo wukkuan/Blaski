@@ -110,6 +110,25 @@ define([
 				};
 			}
 
+			function prepare_readdir_invalid() {
+				client.readdir = function(path, options, callback) {
+					if (callback === undefined) {
+						callback = options;
+						options = {};
+					}
+					var error = new Dropbox.ApiError({
+						status: 404,
+						responseText: "File not found."
+					}, 'GET', 'http://unittest.example.com');
+					var filesAndFolderNames = null;
+					var stats = null;
+					var stat = null;
+					Ember.run.next(this, function() {
+						callback(error, filesAndFolderNames, stat, stats);
+					});
+				};
+			}
+
 			function prepare_move_success() {
 				client.move = function(fromPath, toPath, callback) {
 					var error = null;
@@ -366,6 +385,35 @@ define([
 						expect(folder.get('isLoading')).to.be.true;
 						expect(folder.get('isLoaded')).to.be.false;
 					});
+
+					it('should fail to load a folder and handle the error gracefully', function(done) {
+						prepare_readdir_invalid();
+						var repo = Blaski.repository;
+						var folder = repo.getFolder('/');
+
+						expect(folder.get('isDirty')).to.be.true;
+						expect(folder.get('isLoading')).to.be.false;
+						expect(folder.get('isLoaded')).to.be.false;
+						var deferred = folder.load();
+						expect(folder.get('isDirty')).to.be.true;
+						expect(folder.get('isLoading')).to.be.true;
+						expect(folder.get('isLoaded')).to.be.false;
+						deferred.then(
+							function() {
+								// Do nothing.
+							},
+							function() {
+								expect(folder.get('isDirty')).to.be.true;
+								expect(folder.get('isLoading')).to.be.false;
+								expect(folder.get('isLoaded')).to.be.false;
+								done();
+							}
+						);
+						expect(folder.get('isDirty')).to.be.true;
+						expect(folder.get('isLoading')).to.be.true;
+						expect(folder.get('isLoaded')).to.be.false;
+					});
+
 				});
 			});
 		});
