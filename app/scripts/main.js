@@ -13,6 +13,9 @@ require.config({
 		},
 		'dropbox': {
 			exports: 'Dropbox'
+		},
+		'markdown-converter': {
+			exports: 'Markdown'
 		}
 	},
 
@@ -21,7 +24,8 @@ require.config({
 		'ember': 'vendor/ember-1.0.0-pre.2',
 		'ember-data': 'vendor/ember-data-latest',
 		'handlebars': 'vendor/handlebars-latest',
-		'dropbox': 'vendor/dropbox-latest'
+		'dropbox': 'vendor/dropbox-latest',
+		'markdown-converter': 'vendor/Markdown.Converter'
 	}
 });
 

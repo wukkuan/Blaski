@@ -4,7 +4,8 @@ define([
 		'controller/application-controller',
 		'view/application-view',
 		'controller/page-controller',
-		'view/page-view'
+		'view/page-view',
+		'model/repository'
 	], function() {
 		'use strict';
 
@@ -17,7 +18,9 @@ define([
 
 					connectOutlets: function(router) {
 						var appCtrlr = router.get('applicationController');
-						appCtrlr.connectOutlet('body', 'page');
+						var index = Blaski.repository.getFile('/repository/index.md');
+						index.load();
+						appCtrlr.connectOutlet('body', 'page', index);
 					}
 				})
 			})

@@ -6,7 +6,7 @@ define([
 		'use strict';
 
 		Blaski.PageView = Ember.View.extend({
-			template: Handlebars.compile(pageTemplate)
+			template: Ember.Handlebars.compile(pageTemplate)
 		});
 	}
 );

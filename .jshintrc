@@ -27,6 +27,7 @@
         "DS": false,
         "Dropbox": false,
         "Blaski": false,
+        "Markdown": false,
 
         // Unit Testing
         "describe": false,

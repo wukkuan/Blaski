@@ -1,8 +1,7 @@
-<h1>Inside page.hbs</h1>
 {{#if isEditing}}
-
+	{{view Ember.TextArea valueBinding="data"}}
 {{else}}
 	<div class="blaski-page">
-		{{text}}
+		{{{htmlData}}}
 	</div>
 {{/if}}
