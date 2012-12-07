@@ -15,7 +15,27 @@ define([
 					htmlData = converter.makeHtml(data);
 				}
 				return htmlData;
-			}.property('data')
+			}.property('data'),
+
+			save: function() {
+				var deferred = this.get('content').save();
+				var self = this;
+				deferred.then(
+					function() {
+						self.set('isEditing', false);
+					}, function() {
+						alert('failed to save');
+					}
+				);
+			},
+
+			cancel: function() {
+				this.set('isEditing', false);
+			},
+
+			edit: function() {
+				this.set('isEditing', true);
+			}
 		});
 	}
 );
