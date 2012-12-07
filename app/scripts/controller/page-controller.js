@@ -32,6 +32,7 @@ define([
 
 			cancel: function() {
 				this.set('isEditing', false);
+				this.set('data', this.get('persistedState.data'));
 			},
 
 			edit: function() {
