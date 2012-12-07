@@ -23,7 +23,8 @@ define([
 				deferred.then(
 					function() {
 						self.set('isEditing', false);
-					}, function() {
+					},
+					function() {
 						alert('failed to save');
 					}
 				);
