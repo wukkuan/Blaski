@@ -7,6 +7,8 @@ define([
 	], function() {
 		'use strict';
 
+		var GenericDeferred = Ember.Object.extend(Ember.Deferred);
+
 		Blaski.DropboxAdapter = Ember.Object.extend({
 			dropboxAccount: Blaski.dropboxAccount,
 			deferred: null,
@@ -32,7 +34,7 @@ define([
 
 			saveFile: function(context) {
 				if (context.get('isSaving') || context.get('isLoading')) {
-					var failedDeferred = Ember.Object.create(Ember.Deferred);
+					var failedDeferred = GenericDeferred.create();
 					Ember.run.next(this, function() {
 						failedDeferred.reject(this);
 					});
@@ -41,7 +43,7 @@ define([
 				var dropboxAccount = this.get('dropboxAccount');
 				var path = context.get('path');
 				var data = context.get('data');
-				var deferred = Ember.Object.create(Ember.Deferred);
+				var deferred = GenericDeferred.create();
 				this.set('deferred', deferred);
 
 				var self = this;
@@ -74,7 +76,7 @@ define([
 
 			moveFile: function(context, newPath) {
 				if (context.get('isSaving') || context.get('isLoading')) {
-					var failedDeferred = Ember.Object.create(Ember.Deferred);
+					var failedDeferred = GenericDeferred.create();
 					Ember.run.next(this, function() {
 						failedDeferred.reject(this);
 					});
@@ -83,7 +85,7 @@ define([
 
 				var dropboxAccount = this.get('dropboxAccount');
 				var path = context.get('path');
-				var deferred = Ember.Object.create(Ember.Deferred);
+				var deferred = GenericDeferred.create();
 				this.set('deferred', deferred);
 
 				var self = this;
@@ -123,7 +125,7 @@ define([
 				}
 				var dropboxAccount = this.get('dropboxAccount');
 				var path = context.get('path');
-				var deferred = Ember.Object.create(Ember.Deferred);
+				var deferred = GenericDeferred.create();
 				this.set('deferred', deferred);
 
 				var self = this;
@@ -163,7 +165,7 @@ define([
 				}
 				var dropboxAccount = this.get('dropboxAccount');
 				var path = context.get('path');
-				var deferred = Ember.Object.create(Ember.Deferred);
+				var deferred = GenericDeferred.create();
 				this.set('deferred', deferred);
 				context.set('isLoading', true);
 
@@ -217,7 +219,7 @@ define([
 
 			createFolder: function(context) {
 				if (context.get('isSaving') || context.get('isLoading')) {
-					var failedDeferred = Ember.Object.create(Ember.Deferred);
+					var failedDeferred = GenericDeferred.create();
 					Ember.run.next(this, function() {
 						failedDeferred.reject(this);
 					});
@@ -226,7 +228,7 @@ define([
 				var dropboxAccount = this.get('dropboxAccount');
 				var path = context.get('path');
 				var data = context.get('data');
-				var deferred = Ember.Object.create(Ember.Deferred);
+				var deferred = GenericDeferred.create();
 				this.set('deferred', deferred);
 
 				var self = this;

@@ -21,7 +21,7 @@ require.config({
 
 	paths: {
 		'jquery': 'vendor/jquery.min',
-		'ember': 'vendor/ember-1.0.0-pre.2',
+		'ember': 'vendor/ember-latest',
 		'ember-data': 'vendor/ember-data-latest',
 		'handlebars': 'vendor/handlebars-latest',
 		'dropbox': 'vendor/dropbox-latest',
