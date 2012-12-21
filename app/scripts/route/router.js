@@ -11,6 +11,7 @@ define([
 
 		Blaski.Router = Ember.Router.extend({
 			enableLogging: true,
+			location: 'hash',
 
 			root: Ember.Route.extend({
 				index: Ember.Route.extend({
