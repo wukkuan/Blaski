@@ -12,6 +12,9 @@ define([
 				var data = this.get('data');
 				var htmlData = data;
 				if (data) {
+					// Prepend a # onto all links.
+					var processedData = data.replace(/\[(.*)\]\((.*)\)/, '[$1](#$2)');
+
 					htmlData = converter.makeHtml(data);
 				}
 				return htmlData;

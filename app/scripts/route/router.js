@@ -22,6 +22,32 @@ define([
 						index.load();
 						appCtrlr.connectOutlet('body', 'page', index);
 					}
+
+				}),
+
+				pageRoute: Ember.Route.extend({
+					route: '/*pagePath',
+
+					connectOutlets: function(router, context) {
+						console.log('connectOutlets', context);
+						var appCtrlr = router.get('applicationController');
+						var file = Blaski.repository.getFile('/repository/' + context.pagePath + '.md');
+						file.load();
+						appCtrlr.connectOutlet('body', 'page', file);
+					},
+
+					deserialize: function(router, params) {
+						console.log('deserialize', params);
+						// var index = Blaski.repository.getFile('/repository/' + params.pageName + '.md');
+						// index.load();
+						return params;
+					},
+
+					serialize: function(router, context) {
+						console.log('serialize', context);
+						return context;
+					}
+
 				})
 			})
 		});
