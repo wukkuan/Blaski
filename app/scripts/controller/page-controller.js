@@ -13,9 +13,9 @@ define([
 				var htmlData = data;
 				if (data) {
 					// Prepend a # onto all links.
-					var processedData = data.replace(/\[(.*)\]\((.*)\)/, '[$1](#$2)');
+					var processedData = data.replace(/\[([^\]]*)\]\(([^\)]*)\)/g, '[$1](#$2)');
 
-					htmlData = converter.makeHtml(data);
+					htmlData = converter.makeHtml(processedData);
 				}
 				return htmlData;
 			}.property('data'),
