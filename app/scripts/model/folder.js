@@ -20,7 +20,7 @@ define([
 			isDirty: true,
 
 			path: function() {
-				return this.get('path');
+				return this.get('_path');
 			}.property('_path'),
 
 			name: function() {
