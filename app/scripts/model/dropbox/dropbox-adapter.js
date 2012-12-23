@@ -196,10 +196,14 @@ define([
 					contentStats.forEach(function(contentStat) {
 						var item;
 						if (contentStat.isFile) {
-							item = new Blaski.File();
+							item = Blaski.File.create({
+								_adapter: Blaski.DropboxAdapter.create()
+							});
 							context.get("files").pushObject(item);
 						} else if (contentStat.isFolder) {
-							item = new Blaski.Folder();
+							item = Blaski.Folder.create({
+								_adapter: Blaski.DropboxAdapter.create()
+							});
 							context.get("folders").pushObject(item);
 						} else {
 							throw new Error("Folder has non-file/folder content.");
