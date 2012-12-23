@@ -1,0 +1,20 @@
+<div>
+	/{{name}}
+	{{#if isEmpty}}
+		(empty)
+	{{/if}}
+</div>
+
+<ul>
+	{{#each subfolderControllers}}
+		<li class="folder">
+			{{view Blaski.PageIndexTreeView controllerBinding="this"}}
+		</li>
+	{{/each}}
+
+	{{#each files}}
+		<li class="file">
+			{{name}} - {{humanSize}}
+		</li>
+	{{/each}}
+</ul>

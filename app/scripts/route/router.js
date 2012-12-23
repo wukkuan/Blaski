@@ -5,6 +5,8 @@ define([
 		'view/application-view',
 		'controller/page-controller',
 		'view/page-view',
+		'controller/page-index-controller',
+		'view/page-index-view',
 		'model/repository'
 	], function() {
 		'use strict';
@@ -25,6 +27,28 @@ define([
 					}
 
 				}),
+
+				pageIndex: Ember.Route.extend({
+					route: '/index',
+					connectOutlets: function(router) {
+						var appCtrlr = router.get('applicationController');
+						var folder = Blaski.repository.getFolder('/repository');
+						appCtrlr.connectOutlet('body', 'pageIndex', folder);
+						var folderPromise = folder.load();
+						folderPromise.then(
+							function() {
+								// folder;
+								// debugger;
+								console.log('index load success');
+							},
+							function() {
+								console.log('index load failed');
+							}
+						);
+					}
+
+				}),
+
 
 				pageRoute: Ember.Route.extend({
 					route: '/*pagePath',
