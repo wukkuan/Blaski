@@ -38,8 +38,8 @@ define([
 				return name;
 			}.property('path'),
 
-			files: [],
-			folders: [],
+			files: null,
+			folders: null,
 
 			create: function() {
 				return this.get('_adapter').createFolder(this);
@@ -47,6 +47,13 @@ define([
 
 			load: function() {
 				return this.get('_adapter').loadFolder(this);
+			},
+
+			init: function() {
+				this.setProperties({
+					files: Ember.ArrayProxy.create({ content: [] }),
+					folders: Ember.ArrayProxy.create({ content: [] })
+				});
 			}
 		});
 	}

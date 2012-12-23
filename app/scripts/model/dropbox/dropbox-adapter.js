@@ -190,17 +190,17 @@ define([
 					self.applyStat(context, stat);
 
 					// Empty the files and folders arrays.
-					context.get('files').length = 0;
-					context.get('folders').length = 0;
+					context.get('files').clear();
+					context.get('folders').clear();
 
 					contentStats.forEach(function(contentStat) {
 						var item;
 						if (contentStat.isFile) {
 							item = new Blaski.File();
-							context.get("files").push(item);
+							context.get("files").pushObject(item);
 						} else if (contentStat.isFolder) {
 							item = new Blaski.Folder();
-							context.get("folders").push(item);
+							context.get("folders").pushObject(item);
 						} else {
 							throw new Error("Folder has non-file/folder content.");
 						}
