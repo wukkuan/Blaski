@@ -4,7 +4,6 @@ define([
 	], function() {
 		'use strict';
 
-		var converter = new Markdown.Converter();
 		Blaski.PageIndexTreeController = Ember.ObjectController.extend({
 			isEmpty: function() {
 				return this.get('files.length') === 0
