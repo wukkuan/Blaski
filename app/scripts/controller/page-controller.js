@@ -25,7 +25,7 @@ define([
 				var self = this;
 				deferred.then(
 					function() {
-						self.set('isEditing', false);
+						//TODO: Notify user that the save finished.
 					},
 					function() {
 						alert('failed to save');
@@ -33,9 +33,17 @@ define([
 				);
 			},
 
-			cancel: function() {
-				this.set('isEditing', false);
-				this.set('data', this.get('persistedState.data'));
+			close: function() {
+				var data = this.get('data');
+				var persistedData = this.get('persistedState.data');
+				if (data !== persistedData) {
+					if (confirm('You have unsaved changes. Are you sure you want to abandon them?')) {
+						this.set('isEditing', false);
+						this.set('data', this.get('persistedState.data'));
+					}
+				} else {
+					this.set('isEditing', false);
+				}
 			},
 
 			edit: function() {
