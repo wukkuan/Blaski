@@ -51,7 +51,7 @@ define([
 
 
 				pageRoute: Ember.Route.extend({
-					route: '/*pagePath',
+					route: '/page/*pagePath',
 
 					connectOutlets: function(router, context) {
 						console.log('connectOutlets', context);
