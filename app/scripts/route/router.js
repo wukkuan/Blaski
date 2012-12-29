@@ -29,10 +29,21 @@ define([
 				}),
 
 				pageIndex: Ember.Route.extend({
-					route: '/index',
-					connectOutlets: function(router) {
+					route: '/index/*pagePath',
+
+					serialize: function(router, context) {
+						console.log('serializing index');
+						return context;
+					},
+
+					deserialize: function(router, context) {
+						console.log('deserializing index');
+						return context;
+					},
+
+					connectOutlets: function(router, context) {
 						var appCtrlr = router.get('applicationController');
-						var folder = Blaski.repository.getFolder('/repository');
+						var folder = Blaski.repository.getFolder('/repository/' + context.pagePath);
 						appCtrlr.connectOutlet('body', 'pageIndex', folder);
 						var folderPromise = folder.load();
 						folderPromise.then(
@@ -49,6 +60,26 @@ define([
 
 				}),
 
+				rootIndex: Ember.Route.extend({
+					route: '/index-root',
+
+					connectOutlets: function(router, context) {
+						var appCtrlr = router.get('applicationController');
+						var folder = Blaski.repository.getFolder('/repository');
+						appCtrlr.connectOutlet('body', 'pageIndex', folder);
+						var folderPromise = folder.load();
+						folderPromise.then(
+							function() {
+								// folder;
+								// debugger;
+								console.log('index load success');
+							},
+							function() {
+								console.log('index load failed');
+							}
+						);
+					}
+				}),
 
 				pageRoute: Ember.Route.extend({
 					route: '/page/*pagePath',
