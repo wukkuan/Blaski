@@ -6,7 +6,11 @@ define([
 		'use strict';
 
 		Blaski.PageView = Ember.View.extend({
-			template: Ember.Handlebars.compile(pageTemplate)
+			template: Ember.Handlebars.compile(pageTemplate),
+			save: function() {
+				this.$('#page-text-area').focus();
+				this.get('controller').save();
+			}
 		});
 	}
 );

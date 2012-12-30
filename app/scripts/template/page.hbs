@@ -1,6 +1,6 @@
 {{#if isEditing}}
-	{{view Ember.TextArea valueBinding="data" class="blaski-page"}}
-	<button {{action save target="controller"}}>Save</button>
+	{{view Ember.TextArea valueBinding="data" class="blaski-page" id="page-text-area"}}
+	<button {{action save target="view"}}>Save</button>
 	<button {{action close target="controller"}}>Close</button>
 	{{#if isSaving}}
 		Saving...
